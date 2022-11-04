@@ -1,28 +1,27 @@
-import { ref } from 'vue'
+import { computed } from 'vue'
+import { CELL, GAME_STATUSES } from '@/configs'
 
-export default (init, cells, difficulty, cellsQuantity) => {
-  const preview = ref(false)
-
+export default (init, cells, difficulty, cellsQuantity, gameStatus) => {
   const getRandom = (min, max) => {
     return Math.floor(Math.random() * (max - min)) + min
   }
 
   const prepareGame = () => {
-    preview.value = true
+    gameStatus.value = GAME_STATUSES.PREVIEW
 
     for (let i = 0; i < difficulty.value; i++) {
       const index = getRandom(0, cellsQuantity - 1)
 
-      if (!cells.value[index].value) {
-        cells.value[index].value = true
+      if (cells.value[index].value !== CELL.FILLED) {
+        cells.value[index].value = CELL.FILLED
       } else {
         i--
       }
     }
 
     setTimeout(() => {
-      preview.value = false
-    }, 2000)
+      gameStatus.value = GAME_STATUSES.STARTED
+    }, 1500)
   }
 
   const startGame = () => {
@@ -30,8 +29,12 @@ export default (init, cells, difficulty, cellsQuantity) => {
     prepareGame()
   }
 
+  const canStartGame = computed(() => {
+    return gameStatus.value !== GAME_STATUSES.PREVIEW
+  })
+
   return {
-    preview,
+    canStartGame,
     startGame
   }
 }

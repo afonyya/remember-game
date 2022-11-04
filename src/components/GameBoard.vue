@@ -5,7 +5,8 @@
         v-for="cell in cells"
         :key="`cell-${cell.id}`"
         :cell="cell"
-        :preview="preview"
+        :gameStatus="gameStatus"
+        @selectCell="selectCell($event)"
       />
     </div>
 
@@ -16,7 +17,7 @@
 
     <button
       @click="startGame"
-      class="btn"
+      :disabled="!canStartGame"
     >
       Start
     </button>
@@ -24,7 +25,9 @@
 </template>
 
 <script>
-import { useGameInit, useGameStart } from '@/components/composables'
+import { ref } from 'vue'
+import { useGameInit, useGameStart, useGameProcess } from '@/components/composables'
+import { GAME_STATUSES } from '@/configs'
 import BoardCell from '@/components/BoardCell'
 
 export default {
@@ -36,15 +39,28 @@ export default {
 
   setup () {
     const cellsQuantity = 25
+    const gameStatus = ref(GAME_STATUSES.NONE)
+
     const { difficulty, cells, init } = useGameInit(cellsQuantity)
-    const { preview, startGame } = useGameStart(init, cells, difficulty, cellsQuantity)
+
+    const { canStartGame, startGame } = useGameStart(
+      init,
+      cells,
+      difficulty,
+      cellsQuantity,
+      gameStatus
+    )
+
+    const { selectCell } = useGameProcess(cells)
 
     return {
       difficulty,
       cells,
       cellsQuantity,
-      preview,
+      gameStatus,
+      canStartGame,
       startGame,
+      selectCell,
       init
     }
   }
@@ -52,36 +68,40 @@ export default {
 </script>
 
 <style scoped>
-.board-wrapper {
-  margin-bottom: 100px;
-}
+  .board-wrapper {
+    margin-bottom: 100px;
+  }
 
-.board {
-  width: 310px;
-  box-sizing: border-box;
-  padding: 5px;
-  background: #eee;
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-}
+  .board {
+    width: 310px;
+    box-sizing: border-box;
+    padding: 5px;
+    background: #eee;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+  }
 
-.difficulty {
-  font-weight: 600;
-}
+  .difficulty {
+    font-weight: 600;
+  }
 
-.btn {
-  background: #42b983cc;
-  color: #fff;
-  border: none;
-  border-radius: 2px;
-  padding: 10px 30px;
-  margin: 10px 0;
-  cursor: pointer;
-  outline: none
-}
+  button {
+    background: #42b983cc;
+    color: #fff;
+    border: none;
+    border-radius: 2px;
+    padding: 10px 30px;
+    margin: 10px 0;
+    cursor: pointer;
+    outline: none
+  }
 
-.btn:hover {
-  background: #42b983;
-}
+  button:hover {
+    background: #42b983;
+  }
+
+  button:disabled {
+    opacity: .5;
+  }
 </style>

@@ -26,13 +26,13 @@ export default {
 </script>
 
 <style scoped>
-.app {
-  font-family: Helvetica, sans-serif;
-  margin-top: 40px;
-  text-align: center;
-}
+  .app {
+    font-family: Helvetica, sans-serif;
+    margin-top: 40px;
+    text-align: center;
+  }
 
-.logo {
-  width: 100px;
-}
+  .logo {
+    width: 100px;
+  }
 </style>
