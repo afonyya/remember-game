@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <main class="app">
     <img
       src="@/assets/logo.png"
       alt="Vue logo"
@@ -10,7 +10,7 @@
     <p>Remember and open all green cells</p>
 
     <GameBoard />
-  </div>
+  </main>
 </template>
 
 <script>
@@ -18,6 +18,7 @@ import GameBoard from '@/components/GameBoard'
 
 export default {
   name: 'App',
+
   components: {
     GameBoard
   }

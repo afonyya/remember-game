@@ -1,9 +1,10 @@
 <template>
-  <div class="board-wrapper">
+  <section class="board-wrapper">
     <div class="board">
-      <BoardItem
-        v-for="item in 25"
-        :key="`item-${item}`"
+      <BoardCell
+        v-for="cell in cells"
+        :key="`cell-${cell.id}`"
+        :cell="cell"
       />
     </div>
 
@@ -12,24 +13,73 @@
       <span class="difficulty">{{ difficulty }}</span>
     </p>
 
-    <button class="btn">Start</button>
-  </div>
+    <button
+      @click="startGame"
+      class="btn"
+    >
+      Start
+    </button>
+  </section>
 </template>
 
 <script>
-import { ref } from 'vue'
-import BoardItem from '@/components/BoardItem'
+import { onBeforeMount, ref } from 'vue'
+import BoardCell from '@/components/BoardCell'
 
 export default {
   name: 'GameBoard',
+
   components: {
-    BoardItem
+    BoardCell
   },
+
   setup () {
-    const difficulty = ref(1)
+    const difficulty = ref(3)
+    const cells = ref([])
+    const cellsQuantity = 25
+
+    const init = () => {
+      cells.value = []
+
+      for (let i = 0; i < cellsQuantity; i++) {
+        cells.value.push({
+          id: i,
+          isClicked: false,
+          value: false
+        })
+      }
+    }
+
+    onBeforeMount(init)
 
     return {
-      difficulty
+      difficulty,
+      cells,
+      cellsQuantity,
+      init
+    }
+  },
+
+  methods: {
+    getRandom (min, max) {
+      return Math.floor(Math.random() * (max - min)) + min
+    },
+
+    prepareGame () {
+      for (let i = 0; i < this.difficulty; i++) {
+        const index = this.getRandom(0, this.cellsQuantity - 1)
+
+        if (!this.cells[index].value) {
+          this.cells[index].value = true
+        } else {
+          i--
+        }
+      }
+    },
+
+    startGame () {
+      this.init()
+      this.prepareGame()
     }
   }
 }
