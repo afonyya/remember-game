@@ -1,5 +1,5 @@
 <template>
-  <figure :class="['cell', { 'cell-active': cell.value }]" />
+  <figure :class="['cell', { 'cell-active': cell.value && preview }]" />
 </template>
 
 <script>
@@ -10,6 +10,11 @@ export default {
     cell: {
       type: Object,
       required: true
+    },
+
+    preview: {
+      type: Boolean,
+      default: false
     }
   }
 }

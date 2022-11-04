@@ -5,6 +5,7 @@
         v-for="cell in cells"
         :key="`cell-${cell.id}`"
         :cell="cell"
+        :preview="preview"
       />
     </div>
 
@@ -23,7 +24,7 @@
 </template>
 
 <script>
-import { onBeforeMount, ref } from 'vue'
+import { useGameInit, useGameStart } from '@/components/composables'
 import BoardCell from '@/components/BoardCell'
 
 export default {
@@ -34,52 +35,17 @@ export default {
   },
 
   setup () {
-    const difficulty = ref(3)
-    const cells = ref([])
     const cellsQuantity = 25
-
-    const init = () => {
-      cells.value = []
-
-      for (let i = 0; i < cellsQuantity; i++) {
-        cells.value.push({
-          id: i,
-          isClicked: false,
-          value: false
-        })
-      }
-    }
-
-    onBeforeMount(init)
+    const { difficulty, cells, init } = useGameInit(cellsQuantity)
+    const { preview, startGame } = useGameStart(init, cells, difficulty, cellsQuantity)
 
     return {
       difficulty,
       cells,
       cellsQuantity,
+      preview,
+      startGame,
       init
-    }
-  },
-
-  methods: {
-    getRandom (min, max) {
-      return Math.floor(Math.random() * (max - min)) + min
-    },
-
-    prepareGame () {
-      for (let i = 0; i < this.difficulty; i++) {
-        const index = this.getRandom(0, this.cellsQuantity - 1)
-
-        if (!this.cells[index].value) {
-          this.cells[index].value = true
-        } else {
-          i--
-        }
-      }
-    },
-
-    startGame () {
-      this.init()
-      this.prepareGame()
     }
   }
 }
