@@ -15,6 +15,20 @@
       <span class="difficulty">{{ difficulty }}</span>
     </p>
 
+    <p
+      v-if="isWin"
+      class="win"
+    >
+      Congrats! Let's keep playing!
+    </p>
+
+    <p
+      v-else-if="isFail"
+      class="fail"
+    >
+      You lose. Try again!
+    </p>
+
     <button
       @click="startGame"
       :disabled="!canStartGame"
@@ -26,7 +40,11 @@
 
 <script>
 import { ref } from 'vue'
-import { useGameInit, useGameStart, useGameProcess } from '@/components/composables'
+import {
+  useGameInit,
+  useGameStart,
+  useGameProcess
+} from '@/components/composables'
 import { GAME_STATUSES } from '@/configs'
 import BoardCell from '@/components/BoardCell'
 
@@ -51,7 +69,12 @@ export default {
       gameStatus
     )
 
-    const { selectCell } = useGameProcess(cells)
+    const { isWin, isFail, selectCell } = useGameProcess(
+      cells,
+      gameStatus,
+      difficulty,
+      startGame
+    )
 
     return {
       difficulty,
@@ -59,6 +82,8 @@ export default {
       cellsQuantity,
       gameStatus,
       canStartGame,
+      isWin,
+      isFail,
       startGame,
       selectCell,
       init
@@ -103,5 +128,13 @@ export default {
 
   button:disabled {
     opacity: .5;
+  }
+
+  .win {
+    color: #42b983cc;
+  }
+
+  .fail {
+    color: #ff000055
   }
 </style>

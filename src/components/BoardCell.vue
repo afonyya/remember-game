@@ -2,7 +2,10 @@
   <figure
     :class="[
       'cell',
-      { 'cell-active': isCellActive }
+      {
+        'cell-active': isCellActive,
+        'cell-error': isCellError
+      }
     ]"
     @click="selectCell"
   />
@@ -28,15 +31,21 @@ export default {
   },
 
   setup (props) {
-    const isCellActive = computed(() => {
-      return (
-        props.cell.value === CELL.FILLED &&
-        props.gameStatus === GAME_STATUSES.PREVIEW
-      ) || props.cell.clicked
-    })
+    const isCellActive = computed(() =>
+      props.cell.value === CELL.FILLED &&
+        props.gameStatus === GAME_STATUSES.PREVIEW ||
+        props.cell.clicked &&
+        props.cell.value === CELL.FILLED
+    )
+
+    const isCellError = computed(() =>
+      props.cell.clicked &&
+      props.cell.value === CELL.EMPTY
+    )
 
     return {
-      isCellActive
+      isCellActive,
+      isCellError
     }
   },
   methods: {
@@ -63,6 +72,11 @@ export default {
 
   .cell-active {
     background: #42b983cc;
+    transform: rotateX(180deg);
+  }
+
+  .cell-error {
+    background: #ff000055;
     transform: rotateX(180deg);
   }
 </style>

@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import { CELL, GAME_STATUSES } from '@/configs'
+import { CELL, GAME_STATUSES, GAME_SPEED } from '@/configs'
 
 export default (init, cells, difficulty, cellsQuantity, gameStatus) => {
   const getRandom = (min, max) => {
@@ -21,7 +21,7 @@ export default (init, cells, difficulty, cellsQuantity, gameStatus) => {
 
     setTimeout(() => {
       gameStatus.value = GAME_STATUSES.STARTED
-    }, 1500)
+    }, GAME_SPEED)
   }
 
   const startGame = () => {
@@ -30,7 +30,8 @@ export default (init, cells, difficulty, cellsQuantity, gameStatus) => {
   }
 
   const canStartGame = computed(() => {
-    return gameStatus.value !== GAME_STATUSES.PREVIEW
+    return gameStatus.value !== GAME_STATUSES.PREVIEW &&
+      gameStatus.value !== GAME_STATUSES.WIN
   })
 
   return {

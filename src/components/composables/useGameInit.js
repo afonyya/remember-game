@@ -1,8 +1,8 @@
-import { ref, onBeforeMount } from 'vue'
-import { CELL, DIFFICULTY } from '@/configs'
+import { ref, watch, onBeforeMount } from 'vue'
+import { CELL, DEFAULT_DIFFICULTY, MAX_DIFFICULTY } from '@/configs'
 
 export default (cellsQuantity) => {
-  const difficulty = ref(DIFFICULTY)
+  const difficulty = ref(DEFAULT_DIFFICULTY)
   const cells = ref([])
 
   const init = () => {
@@ -16,6 +16,12 @@ export default (cellsQuantity) => {
       })
     }
   }
+
+  watch(difficulty, (newDifficulty) => {
+    if (newDifficulty > MAX_DIFFICULTY) {
+      difficulty.value = MAX_DIFFICULTY
+    }
+  })
 
   onBeforeMount(init)
 
