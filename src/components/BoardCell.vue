@@ -17,19 +17,16 @@ import { CELL, GAME_STATUSES } from '@/configs'
 
 export default {
   name: 'BoardCell',
-
   props: {
     cell: {
       type: Object,
       required: true
     },
-
     gameStatus: {
       type: Number,
       default: GAME_STATUSES.NONE
     }
   },
-
   setup (props) {
     const isCellActive = computed(() =>
       props.cell.value === CELL.FILLED &&
@@ -69,12 +66,10 @@ export default {
     transition: .5s;
     transform-style: preserve-3d;
   }
-
   .cell-active {
     background: #42b983cc;
     transform: rotateX(180deg);
   }
-
   .cell-error {
     background: #ff000055;
     transform: rotateX(180deg);

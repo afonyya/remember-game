@@ -9,26 +9,22 @@
         @selectCell="selectCell($event)"
       />
     </div>
-
     <p>
       <span>Difficulty: </span>
       <span class="difficulty">{{ difficulty }}</span>
     </p>
-
     <p
       v-if="isWin"
       class="win"
     >
       Congrats! Let's keep playing!
     </p>
-
     <p
       v-else-if="isFail"
       class="fail"
     >
       You lose. Try again!
     </p>
-
     <button
       @click="startGame"
       :disabled="!canStartGame"
@@ -50,11 +46,9 @@ import BoardCell from '@/components/BoardCell'
 
 export default {
   name: 'GameBoard',
-
   components: {
     BoardCell
   },
-
   setup () {
     const cellsQuantity = 25
     const gameStatus = ref(GAME_STATUSES.NONE)
@@ -96,7 +90,6 @@ export default {
   .board-wrapper {
     margin-bottom: 100px;
   }
-
   .board {
     width: 310px;
     box-sizing: border-box;
@@ -106,11 +99,9 @@ export default {
     display: flex;
     flex-wrap: wrap;
   }
-
   .difficulty {
     font-weight: 600;
   }
-
   button {
     background: #42b983cc;
     color: #fff;
@@ -121,19 +112,15 @@ export default {
     cursor: pointer;
     outline: none
   }
-
   button:hover {
     background: #42b983;
   }
-
   button:disabled {
     opacity: .5;
   }
-
   .win {
     color: #42b983cc;
   }
-
   .fail {
     color: #ff000055
   }
